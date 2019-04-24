@@ -17,7 +17,11 @@ public class SoccerBall {
     }
 
     private void solve() {
-        this.orderedPieces.add(this.availablePieces.get(20));
+
+    	if(this.orderedPieces.isEmpty()){
+    		return;
+    	}
+        /*this.orderedPieces.add(this.availablePieces.get(20));
 
         this.orderedPieces.getFirst().setConnections(Data.CONNECTIONS[0]);
         this.orderedPieces.getFirst().setPosition(1);
@@ -25,16 +29,29 @@ public class SoccerBall {
         this.orderedPieces.add(this.availablePieces.get(1));
 
         this.orderedPieces.get(1).setConnections(Data.CONNECTIONS[1]);
-        this.orderedPieces.get(1).setPosition(2);
+        this.orderedPieces.get(1).setPosition(2);*/
 
-        int[] connections = Data.CONNECTIONS[3];
+        int[] connections = Data.CONNECTIONS[this.orderedPieces.size()];
         int lenght = connections.length;
 
         Polygon piece = this.getNextType(0, lenght);
         LinkedList<Polygon> connectedPieces = this.getConnectedPieces(piece, connections);
+        if(connectedPieces == null){
+        	System.out.println(this.orderedPieces.size());
+        	int id = this.availablePieces.indexOf(piece);
+        	System.out.println(id);
+        	this.orderedPieces.add(this.availablePieces.get(id));
+        	System.out.println(this.orderedPieces.size());
+        	this.availablePieces.remove(id);
+        	System.out.println(this.availablePieces.size());
+        }
 
         System.out.println("Coucou");
 
+
+    }
+
+    private void reccursif(){
 
     }
 
