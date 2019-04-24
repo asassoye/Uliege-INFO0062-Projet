@@ -1,6 +1,6 @@
 class Pentagon extends Polygon {
 
-    Pentagon(int[] concavity) {
-        super(concavity);
+    Pentagon(int type, int[] concavity) {
+        super(type, concavity);
     }
 }

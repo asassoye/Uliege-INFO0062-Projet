@@ -1,8 +1,15 @@
 import java.util.LinkedList;
 
 public class SoccerBall {
+
     public static void main(String[] args) {
-        LinkedList<Polygon> pieces = PolygonFactory.createPieces();
+        LinkedList<Polygon> orderedPieces = new LinkedList<>();
+        LinkedList<Polygon> availablePieces = PolygonFactory.createPieces();
+
+        assert availablePieces.size() == Data.CONNECTIONS.length : "Nombre de pieces incorrect";
+
+        System.out.println("Start");
+
     }
 }
 
