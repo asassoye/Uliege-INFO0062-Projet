@@ -23,44 +23,62 @@ abstract class Polygon {
         }
         this.concavity[j - 1] = tmp;
 
-        if (this.isRotable()) {
+        if (this.isRotatable()) {
             this.rotation++;
             return true;
         } else {
             this.rotation = 0;
             return false;
         }
-
     }
 
-
-    private boolean isRotable() {
+    private boolean isRotatable() {
         System.out.println(this.concavity.length);
 
         return this.rotation < this.concavity.length - 1;
     }
 
-    int getType() {
-        return this.type;
-    }
-
-    void printPiece() {
+    public void printPiece() {
         System.out.println("Position " + this.position + " - Element " + this.type + " - Orientation " + this.rotation);
-    }
-
-    int[] getConnections() {
-        return connections;
-    }
-
-    void setConnections(int[] connections) {
-        this.connections = connections;
     }
 
     public int getPosition() {
         return position;
     }
 
-    void setPosition(int position) {
+    public void setPosition(int position) {
         this.position = position;
+    }
+
+    public int getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(int rotation) {
+        this.rotation = rotation;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int[] getConcavity() {
+        return concavity;
+    }
+
+    public void setConcavity(int[] concavity) {
+        this.concavity = concavity;
+    }
+
+    public int[] getConnections() {
+        return connections;
+    }
+
+    public void setConnections(int[] connections) {
+        this.connections = connections;
     }
 }
