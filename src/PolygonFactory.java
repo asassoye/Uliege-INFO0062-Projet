@@ -10,9 +10,19 @@ final class PolygonFactory {
         for (int i = 0; i < Data.ELEMENTS_SIDES.length; ++i) {
             for (int j = 0; j < Data.NB_ELEMENTS[i]; ++j) {
                 if (Data.ELEMENTS_SIDES[i].length == 5) {
-                    pieces.addLast(new Pentagon(i + 1, Data.ELEMENTS_SIDES[i]));
+                    try {
+                        pieces.addLast(new Pentagon(i + 1, Data.ELEMENTS_SIDES[i]));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
                 } else if (Data.ELEMENTS_SIDES[i].length == 6) {
-                    pieces.addLast(new Hexagon(i + 1, Data.ELEMENTS_SIDES[i]));
+                    try {
+                        pieces.addLast(new Hexagon(i + 1, Data.ELEMENTS_SIDES[i]));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
                 }
             }
         }

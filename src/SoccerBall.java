@@ -32,9 +32,9 @@ public class SoccerBall {
         this.orderedPieces.get(1).setPosition(2);*/
 
         int[] connections = Data.CONNECTIONS[this.orderedPieces.size()];
-        int lenght = connections.length;
+        int length = connections.length;
 
-        Polygon piece = this.getNextType(0, lenght);
+        Polygon piece = this.getNextType(0, length);
         LinkedList<Polygon> connectedPieces = this.getConnectedPieces(piece, connections);
         if(connectedPieces == null){
         	System.out.println(this.orderedPieces.size());

@@ -1,13 +1,16 @@
 abstract class Polygon {
     private int position;
     private int rotation;
-    private int type;
-    private int[] concavity;
-    private int[] connections = null;
+    protected int type;
+    protected int[] concavity;
+    private int[] connections;
 
     Polygon(int type, int[] concavity) {
+        this.position = 0;
+        this.rotation = 0;
         this.concavity = concavity;
         this.type = type;
+        this.connections = null;
     }
 
     public boolean rotate() {
