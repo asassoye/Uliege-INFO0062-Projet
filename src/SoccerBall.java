@@ -19,27 +19,15 @@ public class SoccerBall {
     private void solve() {
 
         try {
-            addOrderedPiece(this.availablePieces.get(20), Data.CONNECTIONS[0]);
-            addOrderedPiece(this.availablePieces.get(1), Data.CONNECTIONS[1]);
+            Polygon polygon = getNextAvailablePiece(null);
+            addOrderedPiece(polygon, Data.CONNECTIONS[0]);
+
+            polygon = getNextAvailablePiece(polygon);
+            addOrderedPiece(polygon, Data.CONNECTIONS[1]);
             restoreLastOrderedPiece();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-        //Polygon piece = this.getNextType(0, length);
-        //LinkedList<Polygon> connectedPieces = this.getConnectedPieces(piece, connections);
-        //if(connectedPieces == null){
-        //	System.out.println(this.orderedPieces.size());
-        //	int id = this.availablePieces.indexOf(piece);
-        //	System.out.println(id);
-        //	this.orderedPieces.add(this.availablePieces.get(id));
-        //	System.out.println(this.orderedPieces.size());
-        //	this.availablePieces.remove(id);
-        //	System.out.println(this.availablePieces.size());
-        //}
-
-        System.out.println("Coucou");
 
 
     }
@@ -64,12 +52,17 @@ public class SoccerBall {
         return connectedPieces;
     }
 
-    private Polygon getNextType(int actual, int sides) {
-        for (Polygon piece : this.availablePieces) {
-            if (piece.getType() > actual) {
-                if (sides == 5 && piece instanceof Pentagon) {
+    private Polygon getNextAvailablePiece(Polygon polygon) {
+
+        if (polygon instanceof Pentagon) {
+            for (Polygon piece : this.availablePieces) {
+                if (piece instanceof Hexagon) {
                     return piece;
-                } else if (sides == 6 && piece instanceof Hexagon) {
+                }
+            }
+        } else if (polygon instanceof Hexagon || polygon == null) {
+            for (Polygon piece : this.availablePieces) {
+                if (piece instanceof Pentagon) {
                     return piece;
                 }
             }
