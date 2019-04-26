@@ -18,33 +18,25 @@ public class SoccerBall {
 
     private void solve() {
 
-    	if(this.orderedPieces.isEmpty()){
-    		return;
-    	}
-        /*this.orderedPieces.add(this.availablePieces.get(20));
-
-        this.orderedPieces.getFirst().setConnections(Data.CONNECTIONS[0]);
-        this.orderedPieces.getFirst().setPosition(1);
-
-        this.orderedPieces.add(this.availablePieces.get(1));
-
-        this.orderedPieces.get(1).setConnections(Data.CONNECTIONS[1]);
-        this.orderedPieces.get(1).setPosition(2);*/
-
-        int[] connections = Data.CONNECTIONS[this.orderedPieces.size()];
-        int length = connections.length;
-
-        Polygon piece = this.getNextType(0, length);
-        LinkedList<Polygon> connectedPieces = this.getConnectedPieces(piece, connections);
-        if(connectedPieces == null){
-        	System.out.println(this.orderedPieces.size());
-        	int id = this.availablePieces.indexOf(piece);
-        	System.out.println(id);
-        	this.orderedPieces.add(this.availablePieces.get(id));
-        	System.out.println(this.orderedPieces.size());
-        	this.availablePieces.remove(id);
-        	System.out.println(this.availablePieces.size());
+        try {
+            addOrderedPiece(this.availablePieces.get(20), Data.CONNECTIONS[0]);
+            addOrderedPiece(this.availablePieces.get(1), Data.CONNECTIONS[1]);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+
+        //Polygon piece = this.getNextType(0, length);
+        //LinkedList<Polygon> connectedPieces = this.getConnectedPieces(piece, connections);
+        //if(connectedPieces == null){
+        //	System.out.println(this.orderedPieces.size());
+        //	int id = this.availablePieces.indexOf(piece);
+        //	System.out.println(id);
+        //	this.orderedPieces.add(this.availablePieces.get(id));
+        //	System.out.println(this.orderedPieces.size());
+        //	this.availablePieces.remove(id);
+        //	System.out.println(this.availablePieces.size());
+        //}
 
         System.out.println("Coucou");
 
@@ -71,7 +63,6 @@ public class SoccerBall {
         return connectedPieces;
     }
 
-
     private Polygon getNextType(int actual, int sides) {
         for (Polygon piece : this.availablePieces) {
             if (piece.getType() > actual) {
@@ -90,6 +81,20 @@ public class SoccerBall {
         for (Polygon orderedPiece : orderedPieces) {
             orderedPiece.printPiece();
         }
+    }
+
+    private void addOrderedPiece(Polygon polygon, int[] connections) throws Exception {
+        int id = this.availablePieces.indexOf(polygon);
+
+        if (id == -1) {
+            throw new Exception("The required piece is not available");
+        }
+
+        polygon.setConnections(connections);
+        polygon.setPosition(orderedPieces.size() + 1);
+
+        orderedPieces.add(polygon);
+        availablePieces.remove(id);
     }
 }
 
