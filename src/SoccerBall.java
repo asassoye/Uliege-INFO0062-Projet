@@ -21,6 +21,7 @@ public class SoccerBall {
         try {
             addOrderedPiece(this.availablePieces.get(20), Data.CONNECTIONS[0]);
             addOrderedPiece(this.availablePieces.get(1), Data.CONNECTIONS[1]);
+            restoreLastOrderedPiece();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -95,6 +96,16 @@ public class SoccerBall {
 
         orderedPieces.add(polygon);
         availablePieces.remove(id);
+    }
+
+    private void restoreLastOrderedPiece() {
+        Polygon polygon = this.orderedPieces.getLast();
+        polygon.setPosition(0);
+        polygon.setRotation(0);
+        polygon.setConnections(null);
+
+        this.availablePieces.add(polygon);
+        this.orderedPieces.removeLast();
     }
 }
 
