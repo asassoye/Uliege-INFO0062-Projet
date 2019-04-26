@@ -1,4 +1,6 @@
-class Hexagon extends Polygon {
+class Hexagon extends Piece {
+
+    public final static int SIDES = 6;
 
     Hexagon(int type, int[] concavity) throws Exception {
         super(type, concavity);

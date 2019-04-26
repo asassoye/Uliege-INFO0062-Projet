@@ -1,8 +1,8 @@
 import java.util.LinkedList;
 
 public class SoccerBall {
-    private LinkedList<Polygon> availablePieces;
-    private LinkedList<Polygon> orderedPieces;
+    private LinkedList<Piece> availablePieces;
+    private LinkedList<Piece> orderedPieces;
 
 
     private SoccerBall() {
@@ -19,12 +19,24 @@ public class SoccerBall {
     private void solve() {
 
         try {
-            Polygon polygon = getNextAvailablePiece(null);
-            addOrderedPiece(polygon, Data.CONNECTIONS[0]);
+            Piece piece = getNextAvailablePiece(Data.CONNECTIONS[0].length);
+            addOrderedPiece(piece, Data.CONNECTIONS[0]);
 
-            polygon = getNextAvailablePiece(polygon);
-            addOrderedPiece(polygon, Data.CONNECTIONS[1]);
-            restoreLastOrderedPiece();
+            piece = getNextAvailablePiece(Data.CONNECTIONS[1].length);
+            addOrderedPiece(piece, Data.CONNECTIONS[1]);
+
+            int[] concavityArray = this.getConcavityArray(piece);
+
+            piece.rotateToMatchConcavity(concavityArray);
+
+            piece = getNextAvailablePiece(Data.CONNECTIONS[1].length);
+            addOrderedPiece(piece, Data.CONNECTIONS[2]);
+
+            concavityArray = this.getConcavityArray(piece);
+
+            piece.rotateToMatchConcavity(concavityArray);
+
+            //restoreLastOrderedPiece();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -32,72 +44,86 @@ public class SoccerBall {
 
     }
 
-    private void reccursif(){
+    private void reccursif(int position) {
 
     }
 
-    private LinkedList<Polygon> getConnectedPieces(Polygon piece, int[] connections) {
-        LinkedList<Polygon> connectedPieces = new LinkedList<>();
+    private int[] getConcavityArray(Piece piece) {
+        Piece[] connectedPieces = new Piece[piece.getConnections().length];
+        int[] concavityArray = new int[piece.getConcavity().length];
 
-        for (Polygon orderedPiece : this.orderedPieces) {
-            for (int connection : connections) {
-                for (int k = 0; k < orderedPiece.getConnections().length; ++k) {
-                    if (orderedPiece.getConnections()[k] == connection) {
-                        connectedPieces.add(orderedPiece);
+        nextPiece:
+        for (Piece orderedPiece : this.orderedPieces) {
+            if (piece == orderedPiece) {
+                continue;
+            }
+
+            for (int j = 0; j < orderedPiece.getConnections().length; ++j) {
+                int orderedPieceConnection = orderedPiece.getConnections()[j];
+                for (int k = 0; k < piece.getConnections().length; ++k) {
+                    int pieceConnection = piece.getConnections()[k];
+
+                    if (orderedPieceConnection == pieceConnection) {
+                        concavityArray[k] = orderedPiece.getConcavity()[j] * -1;
+                        continue nextPiece;
                     }
                 }
             }
         }
 
-        return connectedPieces;
+        return concavityArray;
     }
 
-    private Polygon getNextAvailablePiece(Polygon polygon) {
+    private Piece getNextAvailablePiece(int sides) throws Exception {
 
-        if (polygon instanceof Pentagon) {
-            for (Polygon piece : this.availablePieces) {
-                if (piece instanceof Hexagon) {
-                    return piece;
-                }
-            }
-        } else if (polygon instanceof Hexagon || polygon == null) {
-            for (Polygon piece : this.availablePieces) {
+        if (sides == Pentagon.SIDES) {
+            for (Piece piece : this.availablePieces) {
                 if (piece instanceof Pentagon) {
                     return piece;
                 }
             }
+        } else if (sides == Hexagon.SIDES) {
+            for (Piece piece : this.availablePieces) {
+                if (piece instanceof Hexagon) {
+                    return piece;
+                }
+            }
+        } else {
+            throw new Exception("No available pieces.");
         }
 
         return null;
     }
 
     private void printOrderedPieces() {
-        for (Polygon orderedPiece : orderedPieces) {
+        for (Piece orderedPiece : orderedPieces) {
             orderedPiece.printPiece();
         }
     }
 
-    private void addOrderedPiece(Polygon polygon, int[] connections) throws Exception {
-        int id = this.availablePieces.indexOf(polygon);
+    private Piece addOrderedPiece(Piece piece, int[] connections) throws Exception {
+        int id = this.availablePieces.indexOf(piece);
 
         if (id == -1) {
             throw new Exception("The required piece is not available");
         }
 
-        polygon.setConnections(connections);
-        polygon.setPosition(orderedPieces.size() + 1);
+        piece.setConnections(connections);
+        piece.setPosition(orderedPieces.size() + 1);
 
-        orderedPieces.add(polygon);
+        orderedPieces.add(piece);
         availablePieces.remove(id);
+
+        return piece;
     }
 
     private void restoreLastOrderedPiece() {
-        Polygon polygon = this.orderedPieces.getLast();
-        polygon.setPosition(0);
-        polygon.setRotation(0);
-        polygon.setConnections(null);
+        Piece piece = this.orderedPieces.getLast();
+        piece.setPosition(0);
+        piece.setRotation(0);
+        piece.setConnections(null);
 
-        this.availablePieces.add(polygon);
+        this.availablePieces.add(piece);
         this.orderedPieces.removeLast();
     }
 }

@@ -1,4 +1,6 @@
-class Pentagon extends Polygon {
+class Pentagon extends Piece {
+
+    public final static int SIDES = 5;
 
     Pentagon(int type, int[] concavity) throws Exception {
         super(type, concavity);

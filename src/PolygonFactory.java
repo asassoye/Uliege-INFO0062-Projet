@@ -4,8 +4,8 @@ final class PolygonFactory {
     private PolygonFactory() {
     }
 
-    static LinkedList<Polygon> createPieces() {
-        LinkedList<Polygon> pieces = new LinkedList<>();
+    static LinkedList<Piece> createPieces() {
+        LinkedList<Piece> pieces = new LinkedList<>();
 
         for (int i = 0; i < Data.ELEMENTS_SIDES.length; ++i) {
             for (int j = 0; j < Data.NB_ELEMENTS[i]; ++j) {

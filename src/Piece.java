@@ -1,11 +1,11 @@
-abstract class Polygon {
+abstract class Piece {
     private int position;
     private int rotation;
     protected int type;
     protected int[] concavity;
     private int[] connections;
 
-    Polygon(int type, int[] concavity) {
+    Piece(int type, int[] concavity) {
         this.position = 0;
         this.rotation = 0;
         this.concavity = concavity;
@@ -13,7 +13,7 @@ abstract class Polygon {
         this.connections = null;
     }
 
-    public boolean rotate() {
+    private boolean rotate() {
         int tmp = this.concavity[0];
         int j = 1;
 
@@ -33,8 +33,6 @@ abstract class Polygon {
     }
 
     private boolean isRotatable() {
-        System.out.println(this.concavity.length);
-
         return this.rotation < this.concavity.length - 1;
     }
 
@@ -80,5 +78,21 @@ abstract class Polygon {
 
     public void setConnections(int[] connections) {
         this.connections = connections;
+    }
+
+    public boolean rotateToMatchConcavity(int[] concavityArray) {
+        for (int i = 0; i < concavityArray.length; ++i) {
+            int concavity = concavityArray[i];
+            if (concavity != 0) {
+                if (this.concavity[i] != concavity) {
+
+                    if (!this.rotate()) {
+                        return false;
+                    }
+                    i = 0;
+                }
+            }
+        }
+        return true;
     }
 }
