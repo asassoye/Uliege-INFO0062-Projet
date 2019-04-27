@@ -1,29 +1,29 @@
+import java.util.LinkedList;
+
 abstract class Piece {
     private int position;
     private int rotation;
     protected int type;
-    protected int[] concavity;
+    protected LinkedList<Integer> concavity = new LinkedList<>();
     private int[] connections;
 
-    Piece(int type, int[] concavity) {
+    Piece(int type, int[] concavityArray) {
         this.position = 0;
         this.rotation = 0;
-        this.concavity = concavity;
+        for (int concavity : concavityArray) {
+            this.concavity.add(concavity);
+        }
+
         this.type = type;
         this.connections = null;
     }
 
-    private boolean rotate() {
-        int tmp = this.concavity[0];
-        int j = 1;
+    private boolean rotateConcavity() {
+        int movingPiece = this.concavity.getFirst();
+        this.concavity.removeFirst();
+        this.concavity.addLast(movingPiece);
 
-        while (j < this.concavity.length) {
-            this.concavity[j - 1] = this.concavity[j];
-            j++;
-        }
-        this.concavity[j - 1] = tmp;
-
-        if (this.isRotatable()) {
+        if (isRotatable()) {
             this.rotation++;
             return true;
         } else {
@@ -33,7 +33,7 @@ abstract class Piece {
     }
 
     private boolean isRotatable() {
-        return this.rotation < this.concavity.length - 1;
+        return this.rotation < this.concavity.size() - 1;
     }
 
     public void printPiece() {
@@ -53,7 +53,9 @@ abstract class Piece {
     }
 
     public void setRotation(int rotation) {
-        this.rotation = rotation;
+        while (this.rotation != rotation) {
+            this.rotateConcavity();
+        }
     }
 
     public int getType() {
@@ -64,11 +66,11 @@ abstract class Piece {
         this.type = type;
     }
 
-    public int[] getConcavity() {
+    public LinkedList<Integer> getConcavity() {
         return concavity;
     }
 
-    public void setConcavity(int[] concavity) {
+    public void setConcavity(LinkedList<Integer> concavity) {
         this.concavity = concavity;
     }
 
@@ -83,16 +85,27 @@ abstract class Piece {
     public boolean rotateToMatchConcavity(int[] concavityArray) {
         for (int i = 0; i < concavityArray.length; ++i) {
             int concavity = concavityArray[i];
-            if (concavity != 0) {
-                if (this.concavity[i] != concavity) {
-
-                    if (!this.rotate()) {
+            if (concavity != 0 && this.concavity.get(i).shortValue() != concavity) {
+                while (this.concavity.get(i).shortValue() != concavity) {
+                    if (!this.rotateConcavity()) {
                         return false;
                     }
-                    i = 0;
                 }
+                i = 0;
             }
         }
         return true;
+    }
+
+    public boolean rotateToMatchConcavity(int[] concavityArray, boolean retry) {
+        if (retry) {
+            if (!this.rotateConcavity()) {
+                return false;
+            }
+            return rotateToMatchConcavity(concavityArray);
+        } else {
+            return rotateToMatchConcavity(concavityArray);
+        }
+
     }
 }

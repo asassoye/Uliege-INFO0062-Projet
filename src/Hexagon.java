@@ -5,7 +5,7 @@ class Hexagon extends Piece {
     Hexagon(int type, int[] concavity) throws Exception {
         super(type, concavity);
 
-        if (concavity == null || concavity.length != 6) {
+        if (concavity.length != SIDES) {
             throw new Exception("Hexagon concavity array must have 6 elements");
         }
 

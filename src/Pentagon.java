@@ -4,7 +4,7 @@ class Pentagon extends Piece {
 
     Pentagon(int type, int[] concavity) throws Exception {
         super(type, concavity);
-        if (this.concavity == null || this.concavity.length != 5) {
+        if (this.concavity.size() != SIDES) {
             throw new Exception("Pentagon concavity array must have 5 elements");
         }
 

@@ -1,56 +1,76 @@
-import java.util.LinkedList;
-
 public class SoccerBall {
-    private LinkedList<Piece> availablePieces;
-    private LinkedList<Piece> orderedPieces;
+    private PieceCollection availablePieces;
+    private PieceCollection orderedPieces;
 
 
     private SoccerBall() {
         this.availablePieces = PolygonFactory.createPieces();
-        this.orderedPieces = new LinkedList<>();
+        this.orderedPieces = new PieceCollection();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         SoccerBall soccerBall = new SoccerBall();
-        soccerBall.solve();
-        soccerBall.printOrderedPieces();
-    }
 
-    private void solve() {
-
-        try {
-            Piece piece = getNextAvailablePiece(Data.CONNECTIONS[0].length);
-            addOrderedPiece(piece, Data.CONNECTIONS[0]);
-
-            piece = getNextAvailablePiece(Data.CONNECTIONS[1].length);
-            addOrderedPiece(piece, Data.CONNECTIONS[1]);
-
-            int[] concavityArray = this.getConcavityArray(piece);
-
-            piece.rotateToMatchConcavity(concavityArray);
-
-            piece = getNextAvailablePiece(Data.CONNECTIONS[1].length);
-            addOrderedPiece(piece, Data.CONNECTIONS[2]);
-
-            concavityArray = this.getConcavityArray(piece);
-
-            piece.rotateToMatchConcavity(concavityArray);
-
-            //restoreLastOrderedPiece();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!soccerBall.solve()) {
+            System.out.println("No solution found.");
         }
 
+        soccerBall.printOrderedPieces();
 
     }
 
-    private void reccursif(int position) {
+    private boolean solve() throws Exception {
+        return solve(0);
+    }
 
+    private boolean solve(int index) throws Exception {
+        boolean found = false;
+        int[] concavityArray;
+        boolean rotated;
+        Piece piece;
+        int retry = 0;
+        int firstType = 0;
+
+        while (!found) {
+            piece = getNextAvailablePiece(Data.CONNECTIONS[index].length);
+            this.addOrderedPiece(piece, Data.CONNECTIONS[index]);
+
+            concavityArray = getConcavityArray(piece);
+
+            if (retry > 0) {
+                if (retry >= this.availablePieces.numberOf(piece.getClass()) - 1) {
+                    return false;
+                }
+
+                if (piece.type == firstType || !piece.rotateToMatchConcavity(concavityArray, true)) {
+                    this.restoreLastOrderedPiece();
+                    retry++;
+                    continue;
+                }
+            } else {
+                rotated = piece.rotateToMatchConcavity(concavityArray);
+                if (!rotated) {
+                    this.restoreLastOrderedPiece();
+                    retry++;
+                    firstType = piece.type;
+                    continue;
+                }
+            }
+
+            if ((index == Data.CONNECTIONS.length - 1) || solve(index + 1)) {
+                found = true;
+            } else {
+                this.restoreLastOrderedPiece();
+                retry++;
+                continue;
+            }
+        }
+        return true;
     }
 
     private int[] getConcavityArray(Piece piece) {
         Piece[] connectedPieces = new Piece[piece.getConnections().length];
-        int[] concavityArray = new int[piece.getConcavity().length];
+        int[] concavityArray = new int[piece.getConcavity().size()];
 
         nextPiece:
         for (Piece orderedPiece : this.orderedPieces) {
@@ -64,7 +84,7 @@ public class SoccerBall {
                     int pieceConnection = piece.getConnections()[k];
 
                     if (orderedPieceConnection == pieceConnection) {
-                        concavityArray[k] = orderedPiece.getConcavity()[j] * -1;
+                        concavityArray[k] = orderedPiece.getConcavity().get(j) * -1;
                         continue nextPiece;
                     }
                 }
@@ -88,8 +108,6 @@ public class SoccerBall {
                     return piece;
                 }
             }
-        } else {
-            throw new Exception("No available pieces.");
         }
 
         return null;
@@ -108,6 +126,10 @@ public class SoccerBall {
             throw new Exception("The required piece is not available");
         }
 
+        if (connections.length != piece.getConcavity().size()) {
+            throw new Exception("The connections are not compatible with piece");
+        }
+
         piece.setConnections(connections);
         piece.setPosition(orderedPieces.size() + 1);
 
@@ -123,8 +145,8 @@ public class SoccerBall {
         piece.setRotation(0);
         piece.setConnections(null);
 
-        this.availablePieces.add(piece);
         this.orderedPieces.removeLast();
+        this.availablePieces.addLast(piece);
     }
 }
 
