@@ -51,7 +51,7 @@ public class SoccerBall {
     private boolean solve(int index) throws Exception {
         boolean found = false;
         int[] concavityArray;
-        boolean rotated;
+        boolean rotated = false;
         Piece piece;
         int retry = 0;
         int firstType = 0;
@@ -75,7 +75,7 @@ public class SoccerBall {
                     return false;
                 }
 
-                if (piece.element == firstType || !piece.rotateToMatchConcavity(concavityArray, true)) {
+                if (!piece.rotateToMatchConcavity(concavityArray, rotated)) {
                     this.restoreLastOrderedPiece();
                     retry++;
                     continue;
@@ -164,13 +164,3 @@ public class SoccerBall {
         return orderedPieces;
     }
 }
-
-
-
-
-/*
-TODO -> Check nb element dans Data.CONNECTIONS pour déterminer si Penta ou Hexa
-TODO -> Verifier piece par piece si 2 poly colle entre eux (convex -> concav)
-TODO -> Placer la piece ajouté dans un tablea de "Back up" (-> piece placée)
-TODO -> Delete de la liste le polygone ajouté (Si erreur, le rajouté à la fin et le del du tableau back up)
- */
