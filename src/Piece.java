@@ -102,14 +102,4 @@ abstract class Piece {
 
         return true;
     }
-
-    public boolean rotateToMatchConcavity(int[] concavityArray, boolean retry) {
-        if (retry) {
-            if (!this.rotateConcavity()) {
-                return false;
-            }
-        }
-
-        return rotateToMatchConcavity(concavityArray);
-    }
 }

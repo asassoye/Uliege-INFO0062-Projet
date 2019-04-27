@@ -54,7 +54,7 @@ public class SoccerBall {
         boolean rotated = false;
         Piece piece;
         int retry = 0;
-        int firstType = 0;
+        int firstElement = 0;
 
         if (index > Data.CONNECTIONS.length - 1) {
             throw new Exception("index out of limit index:" + index + "/" + (Data.CONNECTIONS.length - 1));
@@ -75,7 +75,7 @@ public class SoccerBall {
                     return false;
                 }
 
-                if (!piece.rotateToMatchConcavity(concavityArray, rotated)) {
+                if (piece.getElement() == firstElement || !piece.rotateToMatchConcavity(concavityArray)) {
                     this.restoreLastOrderedPiece();
                     retry++;
                     continue;
@@ -85,7 +85,7 @@ public class SoccerBall {
                 if (!rotated) {
                     this.restoreLastOrderedPiece();
                     retry++;
-                    firstType = piece.element;
+                    firstElement = piece.element;
                     continue;
                 }
             }
@@ -95,7 +95,8 @@ public class SoccerBall {
             } else {
                 this.restoreLastOrderedPiece();
                 retry++;
-                firstType = piece.element;
+                rotated = false;
+                firstElement = piece.element;
             }
         }
         return true;
