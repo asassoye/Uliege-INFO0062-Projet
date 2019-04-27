@@ -3,7 +3,7 @@ public class SoccerBall {
     private PieceCollection orderedPieces;
 
 
-    private SoccerBall() {
+    public SoccerBall() {
         this.availablePieces = PolygonFactory.createPieces();
         this.orderedPieces = new PieceCollection();
     }
@@ -19,7 +19,32 @@ public class SoccerBall {
 
     }
 
-    private boolean solve() throws Exception {
+    public static int[] getConcavityArray(Piece piece, PieceCollection placedPieces) {
+        int[] concavityArray = new int[piece.getConcavity().size()];
+
+        nextPiece:
+        for (Piece placedPiece : placedPieces) {
+            if (piece == placedPiece) {
+                continue;
+            }
+
+            for (int j = 0; j < placedPiece.getConnections().length; ++j) {
+                int orderedPieceConnection = placedPiece.getConnections()[j];
+                for (int k = 0; k < piece.getConnections().length; ++k) {
+                    int pieceConnection = piece.getConnections()[k];
+
+                    if (orderedPieceConnection == pieceConnection) {
+                        concavityArray[k] = placedPiece.getConcavity().get(j) * -1;
+                        continue nextPiece;
+                    }
+                }
+            }
+        }
+
+        return concavityArray;
+    }
+
+    public boolean solve() throws Exception {
         return solve(0);
     }
 
@@ -50,7 +75,7 @@ public class SoccerBall {
                     return false;
                 }
 
-                if (piece.type == firstType || !piece.rotateToMatchConcavity(concavityArray, true)) {
+                if (piece.element == firstType || !piece.rotateToMatchConcavity(concavityArray, true)) {
                     this.restoreLastOrderedPiece();
                     retry++;
                     continue;
@@ -60,7 +85,7 @@ public class SoccerBall {
                 if (!rotated) {
                     this.restoreLastOrderedPiece();
                     retry++;
-                    firstType = piece.type;
+                    firstType = piece.element;
                     continue;
                 }
             }
@@ -70,36 +95,15 @@ public class SoccerBall {
             } else {
                 this.restoreLastOrderedPiece();
                 retry++;
-                firstType = piece.type;
+                firstType = piece.element;
                 continue;
             }
         }
         return true;
     }
 
-    private int[] getConcavityArray(Piece piece) {
-        int[] concavityArray = new int[piece.getConcavity().size()];
-
-        nextPiece:
-        for (Piece orderedPiece : this.orderedPieces) {
-            if (piece == orderedPiece) {
-                continue;
-            }
-
-            for (int j = 0; j < orderedPiece.getConnections().length; ++j) {
-                int orderedPieceConnection = orderedPiece.getConnections()[j];
-                for (int k = 0; k < piece.getConnections().length; ++k) {
-                    int pieceConnection = piece.getConnections()[k];
-
-                    if (orderedPieceConnection == pieceConnection) {
-                        concavityArray[k] = orderedPiece.getConcavity().get(j) * -1;
-                        continue nextPiece;
-                    }
-                }
-            }
-        }
-
-        return concavityArray;
+    public int[] getConcavityArray(Piece piece) {
+        return getConcavityArray(piece, this.orderedPieces);
     }
 
     private Piece getNextAvailablePiece(int sides) throws Exception {
@@ -150,11 +154,15 @@ public class SoccerBall {
     private void restoreLastOrderedPiece() {
         Piece piece = this.orderedPieces.getLast();
         piece.setPosition(0);
-        piece.setRotation(0);
+        piece.setOrientation(0);
         piece.setConnections(null);
 
         this.orderedPieces.removeLast();
         this.availablePieces.addLast(piece);
+    }
+
+    public PieceCollection getOrderedPieces() {
+        return orderedPieces;
     }
 }
 

@@ -10,7 +10,7 @@ class Hexagon extends Piece {
         }
 
         if (type < 1 || type > 10) {
-            throw new Exception("Hexagon type must have a value between 11 and 14");
+            throw new Exception("Hexagon element must have a value between 11 and 14");
         }
     }
 }

@@ -2,19 +2,19 @@ import java.util.LinkedList;
 
 abstract class Piece {
     private int position;
-    private int rotation;
-    protected int type;
+    protected int element;
+    private int orientation;
     protected LinkedList<Integer> concavity = new LinkedList<>();
     private int[] connections;
 
-    Piece(int type, int[] concavityArray) {
+    Piece(int element, int[] concavityArray) {
         this.position = 0;
-        this.rotation = 0;
+        this.orientation = 0;
         for (int concavity : concavityArray) {
             this.concavity.add(concavity);
         }
 
-        this.type = type;
+        this.element = element;
         this.connections = null;
     }
 
@@ -34,20 +34,20 @@ abstract class Piece {
         }
 
         if (isRotatable()) {
-            this.rotation++;
+            this.orientation++;
             return true;
         } else {
-            this.rotation = 0;
+            this.orientation = 0;
             return false;
         }
     }
 
     private boolean isRotatable() {
-        return this.rotation < this.concavity.size();
+        return this.orientation < this.concavity.size();
     }
 
     public void printPiece() {
-        System.out.println("Position " + this.position + " - Element " + this.type + " - Orientation " + this.rotation);
+        System.out.println("Position " + this.position + " - Element " + this.element + " - Orientation " + this.orientation);
     }
 
     public int getPosition() {
@@ -58,22 +58,22 @@ abstract class Piece {
         this.position = position;
     }
 
-    public int getRotation() {
-        return rotation;
+    public int getOrientation() {
+        return orientation;
     }
 
-    public void setRotation(int rotation) {
-        while (this.rotation != rotation) {
+    public void setOrientation(int orientation) {
+        while (this.orientation != orientation) {
             this.rotateConcavity();
         }
     }
 
-    public int getType() {
-        return type;
+    public int getElement() {
+        return element;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setElement(int element) {
+        this.element = element;
     }
 
     public LinkedList<Integer> getConcavity() {

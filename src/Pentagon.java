@@ -8,8 +8,8 @@ class Pentagon extends Piece {
             throw new Exception("Pentagon concavity array must have 5 elements");
         }
 
-        if (this.type < 11 || this.type > 14) {
-            throw new Exception("Pentagon type must have a value between 11 and 14");
+        if (this.element < 11 || this.element > 14) {
+            throw new Exception("Pentagon element must have a value between 11 and 14");
         }
     }
 }
