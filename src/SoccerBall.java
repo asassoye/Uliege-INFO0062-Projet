@@ -45,7 +45,7 @@ public class SoccerBall {
             concavityArray = getConcavityArray(piece);
 
             if (retry > 0) {
-                if (retry >= this.availablePieces.numberOf(piece.getClass()) + 2) {
+                if (retry >= this.availablePieces.numberOf(piece.getClass())) {
                     this.restoreLastOrderedPiece();
                     return false;
                 }
@@ -54,8 +54,6 @@ public class SoccerBall {
                     this.restoreLastOrderedPiece();
                     retry++;
                     continue;
-                } else {
-                    System.out.println("Hello");
                 }
             } else {
                 rotated = piece.rotateToMatchConcavity(concavityArray);
