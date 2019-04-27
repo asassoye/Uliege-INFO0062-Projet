@@ -47,7 +47,12 @@ abstract class Piece {
     }
 
     public void printPiece() {
-        System.out.println("Position " + this.position + " - Element " + this.element + " - Orientation " + this.orientation);
+        System.out.printf(
+                "Position %d - Element %d - Orientation %d%n",
+                this.position,
+                this.element,
+                this.orientation
+        );
     }
 
     public int getPosition() {
@@ -76,12 +81,8 @@ abstract class Piece {
         this.element = element;
     }
 
-    public LinkedList<Integer> getConcavity() {
-        return concavity;
-    }
-
-    public void setConcavity(LinkedList<Integer> concavity) {
-        this.concavity = concavity;
+    public Integer[] getConcavity() {
+        return this.concavity.toArray(new Integer[0]);
     }
 
     public int[] getConnections() {
@@ -92,18 +93,13 @@ abstract class Piece {
         this.connections = connections;
     }
 
-    public boolean rotateToMatchConcavity(int[] concavityArray) {
-        for (int i = 0; i < concavityArray.length; ++i) {
-            int concavity = concavityArray[i];
-            if (concavity != 0 && this.concavity.get(i).shortValue() != concavity) {
-                while (this.concavity.get(i).shortValue() != concavity) {
-                    if (!this.rotateConcavity()) {
-                        return false;
-                    }
-                }
-                i = 0;
+    public boolean rotateToMatchConcavity(int[] concavityMask) {
+        while (!utils.concavityMaskUtils.compare(this.getConcavity(), concavityMask)) {
+            if (!this.rotateConcavity()) {
+                return false;
             }
         }
+
         return true;
     }
 
@@ -112,10 +108,8 @@ abstract class Piece {
             if (!this.rotateConcavity()) {
                 return false;
             }
-            return rotateToMatchConcavity(concavityArray);
-        } else {
-            return rotateToMatchConcavity(concavityArray);
         }
 
+        return rotateToMatchConcavity(concavityArray);
     }
 }

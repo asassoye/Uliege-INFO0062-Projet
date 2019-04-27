@@ -27,12 +27,11 @@ public class SoccerBallTest {
         for (Piece orderedPiece : soccerBall.getOrderedPieces()) {
             int[] concavityArray = SoccerBall.getConcavityArray(orderedPiece, soccerBall.getOrderedPieces());
 
-
             for (int i = 0; i < concavityArray.length; ++i) {
                 try {
                     assertEquals(
                             concavityArray[i],
-                            orderedPiece.getConcavity().get(i),
+                            orderedPiece.getConcavity()[i],
                             String.format(
                                     "[Position %d - Element %d - Orientation %d] n'est pas placé correctement. " +
                                             "La concavité devrait être %s mais est %s",
@@ -40,24 +39,16 @@ public class SoccerBallTest {
                                     orderedPiece.getElement(),
                                     orderedPiece.getOrientation(),
                                     Arrays.toString(concavityArray),
-                                    orderedPiece.getConcavity().toString()));
+                                    Arrays.toString(orderedPiece.getConcavity())));
                 } catch (AssertionFailedError error) {
                     System.out.println(error.getMessage());
                     failed = true;
                     break;
                 }
-
-
             }
-
-
         }
         if (failed) {
             fail("Resultat incorrecte");
         }
-    }
-
-
-    private void assertThrows(Exception e) {
     }
 }

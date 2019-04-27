@@ -20,7 +20,7 @@ public class SoccerBall {
     }
 
     public static int[] getConcavityArray(Piece piece, PieceCollection placedPieces) {
-        int[] concavityArray = new int[piece.getConcavity().size()];
+        int[] concavityArray = new int[piece.getConcavity().length];
 
         nextPiece:
         for (Piece placedPiece : placedPieces) {
@@ -34,7 +34,7 @@ public class SoccerBall {
                     int pieceConnection = piece.getConnections()[k];
 
                     if (orderedPieceConnection == pieceConnection) {
-                        concavityArray[k] = placedPiece.getConcavity().get(j) * -1;
+                        concavityArray[k] = placedPiece.getConcavity()[j] * -1;
                         continue nextPiece;
                     }
                 }
@@ -96,7 +96,6 @@ public class SoccerBall {
                 this.restoreLastOrderedPiece();
                 retry++;
                 firstType = piece.element;
-                continue;
             }
         }
         return true;
@@ -106,7 +105,7 @@ public class SoccerBall {
         return getConcavityArray(piece, this.orderedPieces);
     }
 
-    private Piece getNextAvailablePiece(int sides) throws Exception {
+    private Piece getNextAvailablePiece(int sides) {
 
         if (sides == Pentagon.SIDES) {
             for (Piece piece : this.availablePieces) {
@@ -138,7 +137,7 @@ public class SoccerBall {
             throw new Exception("The required piece is not available");
         }
 
-        if (connections.length != piece.getConcavity().size()) {
+        if (connections.length != piece.getConcavity().length) {
             throw new Exception("The connections are not compatible with piece");
         }
 
