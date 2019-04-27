@@ -31,14 +31,22 @@ public class SoccerBall {
         int retry = 0;
         int firstType = 0;
 
+        if (index > Data.CONNECTIONS.length - 1) {
+            throw new Exception("index out of limit index:" + index + "/" + (Data.CONNECTIONS.length - 1));
+        }
+
         while (!found) {
             piece = getNextAvailablePiece(Data.CONNECTIONS[index].length);
+            if (piece == null)
+                throw new Exception("No available piece");
+
             this.addOrderedPiece(piece, Data.CONNECTIONS[index]);
 
             concavityArray = getConcavityArray(piece);
 
             if (retry > 0) {
-                if (retry >= this.availablePieces.numberOf(piece.getClass()) - 1) {
+                if (retry >= this.availablePieces.numberOf(piece.getClass()) + 2) {
+                    this.restoreLastOrderedPiece();
                     return false;
                 }
 
@@ -46,6 +54,8 @@ public class SoccerBall {
                     this.restoreLastOrderedPiece();
                     retry++;
                     continue;
+                } else {
+                    System.out.println("Hello");
                 }
             } else {
                 rotated = piece.rotateToMatchConcavity(concavityArray);
@@ -62,6 +72,7 @@ public class SoccerBall {
             } else {
                 this.restoreLastOrderedPiece();
                 retry++;
+                firstType = piece.type;
                 continue;
             }
         }
@@ -69,7 +80,6 @@ public class SoccerBall {
     }
 
     private int[] getConcavityArray(Piece piece) {
-        Piece[] connectedPieces = new Piece[piece.getConnections().length];
         int[] concavityArray = new int[piece.getConcavity().size()];
 
         nextPiece:

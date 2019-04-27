@@ -19,9 +19,19 @@ abstract class Piece {
     }
 
     private boolean rotateConcavity() {
-        int movingPiece = this.concavity.getFirst();
-        this.concavity.removeFirst();
-        this.concavity.addLast(movingPiece);
+        return rotateConcavity(true);
+    }
+
+    private boolean rotateConcavity(boolean clockwize) {
+        if (clockwize) {
+            int movingPiece = this.concavity.getFirst();
+            this.concavity.removeFirst();
+            this.concavity.addLast(movingPiece);
+        } else {
+            int movingPiece = this.concavity.getLast();
+            this.concavity.removeLast();
+            this.concavity.addFirst(movingPiece);
+        }
 
         if (isRotatable()) {
             this.rotation++;
@@ -33,7 +43,7 @@ abstract class Piece {
     }
 
     private boolean isRotatable() {
-        return this.rotation < this.concavity.size() - 1;
+        return this.rotation < this.concavity.size();
     }
 
     public void printPiece() {
