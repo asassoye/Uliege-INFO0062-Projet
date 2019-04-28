@@ -67,6 +67,10 @@ public class SoccerBall {
             throw new Exception("index out of limit index:" + index + "/" + (Data.CONNECTIONS.length - 1));
         }
 
+        if (index > orderedPieces.size()) {
+            throw new Exception("index error");
+        }
+
         while (!found) {
             piece = getNextAvailablePiece(Data.CONNECTIONS[index].length);
             if (piece == null)
@@ -93,6 +97,7 @@ public class SoccerBall {
                     this.restoreLastOrderedPiece();
                     retry++;
                     firstElement = piece.getElement();
+                    continue;
                 }
             }
 
@@ -101,7 +106,6 @@ public class SoccerBall {
             } else {
                 this.restoreLastOrderedPiece();
                 retry++;
-                rotated = false;
                 firstElement = piece.getElement();
             }
         }

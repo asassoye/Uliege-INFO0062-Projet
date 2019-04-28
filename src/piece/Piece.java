@@ -21,7 +21,7 @@ public abstract class Piece {
     }
 
     private boolean rotateConcavity() {
-        return rotateConcavity(true);
+        return rotateConcavity(false);
     }
 
     private boolean rotateConcavity(boolean clockwize) {
