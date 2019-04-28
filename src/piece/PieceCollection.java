@@ -1,3 +1,5 @@
+package piece;
+
 import java.util.LinkedList;
 
 public class PieceCollection extends LinkedList<Piece> {

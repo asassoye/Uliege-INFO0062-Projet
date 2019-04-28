@@ -1,8 +1,11 @@
-final class PolygonFactory {
-    private PolygonFactory() {
-    }
+package utils;
 
-    static PieceCollection createPieces() {
+import piece.Hexagon;
+import piece.Pentagon;
+import piece.PieceCollection;
+
+public final class PolygonFactory {
+    public static PieceCollection createPieces() {
         PieceCollection pieces = new PieceCollection();
 
         for (int i = 0; i < Data.ELEMENTS_SIDES.length; ++i) {

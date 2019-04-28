@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
+import piece.Piece;
+import utils.Data;
 
 import java.util.Arrays;
 

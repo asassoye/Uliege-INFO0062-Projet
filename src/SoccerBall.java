@@ -1,3 +1,10 @@
+import piece.Hexagon;
+import piece.Pentagon;
+import piece.Piece;
+import piece.PieceCollection;
+import utils.Data;
+import utils.PolygonFactory;
+
 public class SoccerBall {
     private PieceCollection availablePieces;
     private PieceCollection orderedPieces;
@@ -85,8 +92,7 @@ public class SoccerBall {
                 if (!rotated) {
                     this.restoreLastOrderedPiece();
                     retry++;
-                    firstElement = piece.element;
-                    continue;
+                    firstElement = piece.getElement();
                 }
             }
 
@@ -96,13 +102,13 @@ public class SoccerBall {
                 this.restoreLastOrderedPiece();
                 retry++;
                 rotated = false;
-                firstElement = piece.element;
+                firstElement = piece.getElement();
             }
         }
         return true;
     }
 
-    public int[] getConcavityArray(Piece piece) {
+    private int[] getConcavityArray(Piece piece) {
         return getConcavityArray(piece, this.orderedPieces);
     }
 

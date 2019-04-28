@@ -1,6 +1,8 @@
+package piece;
+
 import java.util.LinkedList;
 
-abstract class Piece {
+public abstract class Piece {
     private int position;
     protected int element;
     private int orientation;

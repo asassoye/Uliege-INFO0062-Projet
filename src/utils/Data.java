@@ -1,5 +1,6 @@
+package utils;
 /*
- * Data provided to solve the soccer ball puzzle. The CONNECTIONS array is a 2D array containing
+ * utils.Data provided to solve the soccer ball puzzle. The CONNECTIONS array is a 2D array containing
  * 32 lines (for 32 facets), each line providing the associated connection numbers seen on
  * soccer_ball_net.pdf, while ELEMENTS_SIDES and NB_LINES provide respectively the concavity and
  * convexity of each side of a piece and the amount of occurrences for each different piece. The
@@ -11,8 +12,8 @@
  * -the amount of unique (puzzle) pieces.
  */
 
-public class Data {
-    final static int[][] CONNECTIONS = {
+public final class Data {
+    public final static int[][] CONNECTIONS = {
             {1, 2, 3, 4, 5}, {22, 13, 7, 1, 6, 12},
             {14, 23, 15, 8, 2, 7}, {8, 16, 24, 17, 9, 3},
             {4, 9, 18, 25, 19, 10}, {6, 5, 10, 20, 21, 11},
@@ -30,7 +31,7 @@ public class Data {
             {82, 88, 83, 76, 61, 68}, {69, 83, 89, 84, 78, 63},
             {65, 70, 84, 90, 85, 80}, {86, 90, 89, 88, 87}};
 
-    final static int[][] ELEMENTS_SIDES = {
+    public final static int[][] ELEMENTS_SIDES = {
             {1, -1, 1, 1, 1, -1}, {-1, -1, 1, 1, 1, -1},
             {1, 1, -1, 1, 1, -1}, {1, -1, 1, -1, 1, -1},
             {1, -1, -1, 1, -1, -1}, {1, -1, -1, 1, 1, -1},
@@ -39,6 +40,6 @@ public class Data {
             {1, -1, -1, -1, 1}, {1, 1, -1, -1, 1},
             {-1, 1, -1, -1, 1}, {1, 1, -1, 1, -1}};
 
-    final static int[] NB_ELEMENTS =
+    public final static int[] NB_ELEMENTS =
             {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3};
 }
