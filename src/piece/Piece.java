@@ -26,13 +26,13 @@ public abstract class Piece {
 
     private boolean rotateConcavity(boolean clockwize) {
         if (clockwize) {
-            int movingPiece = this.concavity.getFirst();
-            this.concavity.removeFirst();
-            this.concavity.addLast(movingPiece);
-        } else {
             int movingPiece = this.concavity.getLast();
             this.concavity.removeLast();
             this.concavity.addFirst(movingPiece);
+        } else {
+            int movingPiece = this.concavity.getFirst();
+            this.concavity.removeFirst();
+            this.concavity.addLast(movingPiece);
         }
 
         if (isRotatable()) {
