@@ -27,7 +27,7 @@ public class SoccerBallTest {
     public void VerifyResult() {
         boolean failed = false;
         for (Piece orderedPiece : soccerBall.getOrderedPieces()) {
-            int[] concavityArray = SoccerBall.getConcavityArray(orderedPiece, soccerBall.getOrderedPieces());
+            int[] concavityArray = SoccerBall.getConcavityMask(orderedPiece, soccerBall.getOrderedPieces());
 
             for (int i = 0; i < concavityArray.length; ++i) {
                 try {

@@ -26,7 +26,7 @@ public class SoccerBall {
 
     }
 
-    public static int[] getConcavityArray(Piece piece, PieceCollection placedPieces) {
+    public static int[] getConcavityMask(Piece piece, PieceCollection placedPieces) {
         int[] concavityArray = new int[piece.getConcavity().length];
 
         nextPiece:
@@ -58,7 +58,7 @@ public class SoccerBall {
     private boolean solve(int index) throws Exception {
         boolean found = false;
         int[] concavityArray;
-        boolean rotated = false;
+        boolean rotated;
         Piece piece;
         int retry = 0;
         int firstElement = 0;
@@ -72,20 +72,16 @@ public class SoccerBall {
         }
 
         while (!found) {
-            piece = getNextAvailablePiece(Data.CONNECTIONS[index].length);
-            if (piece == null)
-                throw new Exception("No available piece");
+            piece = getNextAvailablePiece(Data.CONNECTIONS[index].length, retry);
+            if (piece == null) {
+                return false;
+            }
 
             this.addOrderedPiece(piece, Data.CONNECTIONS[index]);
 
-            concavityArray = getConcavityArray(piece);
+            concavityArray = getConcavityMask(piece);
 
             if (retry > 0) {
-                if (retry >= this.availablePieces.numberOf(piece.getClass())) {
-                    this.restoreLastOrderedPiece();
-                    return false;
-                }
-
                 if (piece.getElement() == firstElement || !piece.rotateToMatchConcavity(concavityArray)) {
                     this.restoreLastOrderedPiece();
                     retry++;
@@ -112,22 +108,36 @@ public class SoccerBall {
         return true;
     }
 
-    private int[] getConcavityArray(Piece piece) {
-        return getConcavityArray(piece, this.orderedPieces);
+    private int[] getConcavityMask(Piece piece) {
+        return getConcavityMask(piece, this.orderedPieces);
     }
 
     private Piece getNextAvailablePiece(int sides) {
+        return this.getNextAvailablePiece(sides, 0);
+    }
+
+    private Piece getNextAvailablePiece(int sides, int skip) {
+        int skipped = 0;
 
         if (sides == Pentagon.SIDES) {
             for (Piece piece : this.availablePieces) {
                 if (piece instanceof Pentagon) {
-                    return piece;
+                    if (skipped == skip) {
+                        return piece;
+                    } else {
+                        ++skipped;
+                    }
+
                 }
             }
         } else if (sides == Hexagon.SIDES) {
             for (Piece piece : this.availablePieces) {
                 if (piece instanceof Hexagon) {
-                    return piece;
+                    if (skipped == skip) {
+                        return piece;
+                    } else {
+                        ++skipped;
+                    }
                 }
             }
         }
@@ -141,7 +151,7 @@ public class SoccerBall {
         }
     }
 
-    private Piece addOrderedPiece(Piece piece, int[] connections) throws Exception {
+    private void addOrderedPiece(Piece piece, int[] connections) throws Exception {
         int id = this.availablePieces.indexOf(piece);
 
         if (id == -1) {
@@ -157,18 +167,30 @@ public class SoccerBall {
 
         orderedPieces.add(piece);
         availablePieces.remove(id);
-
-        return piece;
     }
 
-    private void restoreLastOrderedPiece() {
+    private void restoreLastOrderedPiece() throws Exception {
         Piece piece = this.orderedPieces.getLast();
         piece.setPosition(0);
         piece.setOrientation(0);
         piece.setConnections(null);
 
         this.orderedPieces.removeLast();
-        this.availablePieces.addLast(piece);
+
+        if (this.availablePieces.size() == 0) {
+            this.availablePieces.add(piece);
+        } else {
+            for (int i = 0; i < this.availablePieces.size(); ++i) {
+                if (this.availablePieces.get(i).getElement() >= piece.getElement()) {
+                    this.availablePieces.add(i, piece);
+                    return;
+                }
+            }
+            this.availablePieces.add(piece);
+        }
+
+
+
     }
 
     public PieceCollection getOrderedPieces() {

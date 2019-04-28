@@ -21,7 +21,7 @@ public abstract class Piece {
     }
 
     private boolean rotateConcavity() {
-        return rotateConcavity(false);
+        return rotateConcavity(true);
     }
 
     private boolean rotateConcavity(boolean clockwize) {
@@ -45,7 +45,7 @@ public abstract class Piece {
     }
 
     private boolean isRotatable() {
-        return this.orientation < this.concavity.size();
+        return this.orientation < this.concavity.size() - 1;
     }
 
     public void printPiece() {
@@ -69,7 +69,11 @@ public abstract class Piece {
         return orientation;
     }
 
-    public void setOrientation(int orientation) {
+    public void setOrientation(int orientation) throws Exception {
+        if (orientation < 0 || orientation > this.concavity.size() - 1) {
+            throw new Exception("Set orientation impossible!");
+        }
+
         while (this.orientation != orientation) {
             this.rotateConcavity();
         }
