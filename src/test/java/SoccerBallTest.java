@@ -1,7 +1,7 @@
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 import piece.Piece;
-import utils.Data;
+import utils.ConcavityMask;
 
 import java.util.Arrays;
 
@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class SoccerBallTest {
-    private final int NUMBER_OF_PIECES = Data.CONNECTIONS.length;
     private SoccerBall soccerBall;
 
     public SoccerBallTest() {
@@ -27,7 +26,7 @@ public class SoccerBallTest {
     public void VerifyResult() {
         boolean failed = false;
         for (Piece orderedPiece : soccerBall.getOrderedPieces()) {
-            int[] concavityArray = SoccerBall.getConcavityMask(orderedPiece, soccerBall.getOrderedPieces());
+            int[] concavityArray = ConcavityMask.getConcavityMask(orderedPiece, soccerBall.getOrderedPieces());
 
             for (int i = 0; i < concavityArray.length; ++i) {
                 try {

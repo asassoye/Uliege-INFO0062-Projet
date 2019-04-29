@@ -1,5 +1,7 @@
 package piece;
 
+import utils.ConcavityMask;
+
 import java.util.LinkedList;
 
 public abstract class Piece {
@@ -100,7 +102,7 @@ public abstract class Piece {
     }
 
     public boolean rotateToMatchConcavity(int[] concavityMask) {
-        while (!utils.concavityMaskUtils.compare(this.getConcavity(), concavityMask)) {
+        while (!ConcavityMask.compare(this.getConcavity(), concavityMask)) {
             if (!this.rotateConcavity()) {
                 return false;
             }

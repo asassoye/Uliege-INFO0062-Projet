@@ -2,6 +2,7 @@ import piece.Hexagon;
 import piece.Pentagon;
 import piece.Piece;
 import piece.PieceCollection;
+import utils.ConcavityMask;
 import utils.Data;
 import utils.PolygonFactory;
 
@@ -24,31 +25,6 @@ public class SoccerBall {
 
         soccerBall.printOrderedPieces();
 
-    }
-
-    public static int[] getConcavityMask(Piece piece, PieceCollection placedPieces) {
-        int[] concavityArray = new int[piece.getConcavity().length];
-
-        nextPiece:
-        for (Piece placedPiece : placedPieces) {
-            if (piece == placedPiece) {
-                continue;
-            }
-
-            for (int j = 0; j < placedPiece.getConnections().length; ++j) {
-                int orderedPieceConnection = placedPiece.getConnections()[j];
-                for (int k = 0; k < piece.getConnections().length; ++k) {
-                    int pieceConnection = piece.getConnections()[k];
-
-                    if (orderedPieceConnection == pieceConnection) {
-                        concavityArray[k] = placedPiece.getConcavity()[j] * -1;
-                        continue nextPiece;
-                    }
-                }
-            }
-        }
-
-        return concavityArray;
     }
 
     public boolean solve() throws Exception {
@@ -109,11 +85,7 @@ public class SoccerBall {
     }
 
     private int[] getConcavityMask(Piece piece) {
-        return getConcavityMask(piece, this.orderedPieces);
-    }
-
-    private Piece getNextAvailablePiece(int sides) {
-        return this.getNextAvailablePiece(sides, 0);
+        return ConcavityMask.getConcavityMask(piece, this.orderedPieces);
     }
 
     private Piece getNextAvailablePiece(int sides, int skip) {
@@ -144,6 +116,7 @@ public class SoccerBall {
 
         return null;
     }
+
 
     private void printOrderedPieces() {
         for (Piece orderedPiece : orderedPieces) {
