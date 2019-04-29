@@ -1,4 +1,5 @@
-FROM maven:3-jdk-12
+FROM maven:latest
+COPY . /usr/soccerball/
 WORKDIR /usr/soccerball
-RUN mvn clean package
-CMD ["java", "SoccerBall"]
+RUN mvn compile
+CMD ["java", "-cp", "build/classes/", "SoccerBall"]

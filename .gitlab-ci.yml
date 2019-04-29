@@ -2,7 +2,19 @@ image: maven:3-jdk-12
 
 stages:
   - build
+  - test
+
+cache:
+  paths:
+    - .m2/repository/
+    - build/
 
 build:
   stage: build
-  script: mvn clean package
+  script:
+    - mvn compile
+
+test:
+  stage: test
+  script:
+    - mvn test

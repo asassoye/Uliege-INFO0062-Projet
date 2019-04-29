@@ -1,13 +1,29 @@
 # Projet: [INFO0062] Object Oriented Programming 
 Ecrit par Andrew Sassoye et Samuel Alvarez Garcia dans le cadre du cours de programmation orienté objet.
 
-## Compiler avec Maven
+## Maven
+### Compilation
 ```console
-$ mvn clean package
+$ mvn compile
+```
+### Execution des tests
+```console
+$ mvn test
 ```
 
-## Executer la résolution du ballon
+### Executer la résolution du ballon
 
 ```console
-$ java -jar build/artifacts/SoccerBall-1.0.jar
+$ java -cp build/classes/ SoccerBall
+```
+
+## Docker
+### Build image
+```console
+$ docker build .
+```
+
+### Executer la résolution du ballon
+```console
+$ docker run <IMAGE>
 ```
