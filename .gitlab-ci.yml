@@ -1,0 +1,10 @@
+image: openjdk:12
+stages:
+  - build
+
+build:
+  stage: build
+  script: ./mvnw package
+  artifacts:
+    paths:
+      - build/SoccerBall.jar
