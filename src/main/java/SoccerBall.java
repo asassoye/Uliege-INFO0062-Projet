@@ -9,15 +9,16 @@ import utils.PolygonFactory;
 public class SoccerBall {
     private PieceCollection availablePieces;
     private PieceCollection orderedPieces;
+    private final static int[][] connections = Data.CONNECTIONS;
 
 
-    public SoccerBall() {
-        this.availablePieces = PolygonFactory.createPieces();
+    public SoccerBall(int[][] concavityArray, int[] nbElements) {
+        this.availablePieces = PolygonFactory.createPieces(concavityArray, nbElements);
         this.orderedPieces = new PieceCollection();
     }
 
     public static void main(String[] args) throws Exception {
-        SoccerBall soccerBall = new SoccerBall();
+        SoccerBall soccerBall = new SoccerBall(Data.ELEMENTS_SIDES, Data.NB_ELEMENTS);
 
         if (!soccerBall.solve()) {
             System.out.println("No solution found.");
@@ -39,8 +40,8 @@ public class SoccerBall {
         int retry = 0;
         int firstElement = 0;
 
-        if (index > Data.CONNECTIONS.length - 1) {
-            throw new Exception("index out of limit index:" + index + "/" + (Data.CONNECTIONS.length - 1));
+        if (index > connections.length - 1) {
+            throw new Exception("index out of limit index:" + index + "/" + (connections.length - 1));
         }
 
         if (index > orderedPieces.size()) {
@@ -48,12 +49,12 @@ public class SoccerBall {
         }
 
         while (!found) {
-            piece = getNextAvailablePiece(Data.CONNECTIONS[index].length, retry);
+            piece = getNextAvailablePiece(connections[index].length, retry);
             if (piece == null) {
                 return false;
             }
 
-            this.addOrderedPiece(piece, Data.CONNECTIONS[index]);
+            this.addOrderedPiece(piece, connections[index]);
 
             concavityArray = getConcavityMask(piece);
 
@@ -73,7 +74,7 @@ public class SoccerBall {
                 }
             }
 
-            if ((index == Data.CONNECTIONS.length - 1) || solve(index + 1)) {
+            if ((index == connections.length - 1) || solve(index + 1)) {
                 found = true;
             } else {
                 this.restoreLastOrderedPiece();

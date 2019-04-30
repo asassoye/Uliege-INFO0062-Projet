@@ -2,6 +2,7 @@ import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 import piece.Piece;
 import utils.ConcavityMask;
+import utils.Data;
 
 import java.util.Arrays;
 
@@ -12,7 +13,7 @@ public class SoccerBallTest {
     private SoccerBall soccerBall;
 
     public SoccerBallTest() {
-        this.soccerBall = new SoccerBall();
+        this.soccerBall = new SoccerBall(Data.ELEMENTS_SIDES, Data.NB_ELEMENTS);
 
 
         try {
