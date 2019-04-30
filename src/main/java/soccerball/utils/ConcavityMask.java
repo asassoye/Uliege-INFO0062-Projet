@@ -1,10 +1,11 @@
-package utils;
+package soccerball.utils;
 
-import piece.Piece;
-import piece.PieceCollection;
+import soccerball.piece.Piece;
+
+import java.util.LinkedList;
 
 public final class ConcavityMask {
-    public static int[] getConcavityMask(Piece piece, PieceCollection placedPieces) {
+    public static int[] getConcavityMask(Piece piece, LinkedList<Piece> placedPieces) {
         int[] concavityArray = new int[piece.getConcavity().length];
 
         nextPiece:

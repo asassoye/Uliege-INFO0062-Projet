@@ -1,1 +1,1 @@
-Main-Class: SoccerBall
+Main-Class: soccerball.SoccerBall

@@ -1,16 +1,40 @@
-package piece;
+package soccerball.piece;
 
-import utils.ConcavityMask;
+import soccerball.utils.ConcavityMask;
 
 import java.util.LinkedList;
 
+/**
+ * Classe piece
+ */
 public abstract class Piece {
-    private int position;
+    /**
+     * L'id de l'element
+     */
     protected int element;
-    private int orientation;
+    /**
+     * Le tableau de concavité
+     */
     protected LinkedList<Integer> concavity = new LinkedList<>();
+    /**
+     * La position de la piece (quand ordonné)
+     */
+    private int position;
+    /**
+     * L'orientation de la piece
+     */
+    private int orientation;
+    /**
+     * Les connections de la piece si placée
+     */
     private int[] connections;
 
+    /**
+     * Constructeur de la piece
+     *
+     * @param element        L'id de l'element
+     * @param concavityArray le tableau de concavité
+     */
     Piece(int element, int[] concavityArray) {
         this.position = 0;
         this.orientation = 0;
@@ -22,10 +46,21 @@ public abstract class Piece {
         this.connections = null;
     }
 
+    /**
+     * Fonction de rotation de la concavité par défault.
+     *
+     * @return rotateConcavity(true);
+     */
     private boolean rotateConcavity() {
         return rotateConcavity(true);
     }
 
+    /**
+     * Fonction de rotation de la concavité
+     *
+     * @param clockwize Rotation horaire (true) ou anti-horaire (false)
+     * @return true si la piece à été tournée, false si elle a fait un tour complet
+     */
     private boolean rotateConcavity(boolean clockwize) {
         if (clockwize) {
             int movingPiece = this.concavity.getLast();
@@ -46,10 +81,18 @@ public abstract class Piece {
         }
     }
 
+    /**
+     * Nous dis si la pièce est tournable ou si elle arrive à un tour complet
+     * @return true si tournable, false si on est a la fin de la rotation
+     */
     private boolean isRotatable() {
         return this.orientation < this.concavity.size() - 1;
     }
 
+    /**
+     * Imprime le resultat de la pièce sous forme
+     * Position [position] - Element [element] - Orientation [orientation]
+     */
     public void printPiece() {
         System.out.printf(
                 "Position %d - Element %d - Orientation %d%n",
@@ -59,18 +102,35 @@ public abstract class Piece {
         );
     }
 
+    /**
+     * Renvoie la position de la pièce
+     * @return this.position
+     */
     public int getPosition() {
-        return position;
+        return this.position;
     }
 
+    /**
+     * Modifie la position de la piece
+     * @param position La nouvelle position
+     */
     public void setPosition(int position) {
         this.position = position;
     }
 
+    /**
+     * Renvoie l'orientation
+     * @return this.orientation
+     */
     public int getOrientation() {
-        return orientation;
+        return this.orientation;
     }
 
+    /**
+     * Regle l'orientation et fait la rotation de la concavité
+     * @param orientation  Orientation souhaitée
+     * @throws Exception  Reglage impossible
+     */
     public void setOrientation(int orientation) throws Exception {
         if (orientation < 0 || orientation > this.concavity.size() - 1) {
             throw new Exception("Set orientation impossible!");
@@ -81,26 +141,51 @@ public abstract class Piece {
         }
     }
 
+    /**
+     * Renvoie l'id de l'element
+     * @return this.element
+     */
     public int getElement() {
-        return element;
+        return this.element;
     }
 
+    /**
+     * Regle l'id de l'element
+     * @param element le nouvel id de l'element
+     */
     public void setElement(int element) {
         this.element = element;
     }
 
+    /**
+     * Renvoie le table de concavité
+     * @return Le table de concavité converti (de LinkedList vers int[])
+     */
     public Integer[] getConcavity() {
         return this.concavity.toArray(new Integer[0]);
     }
 
+    /**
+     * Renvoie le tableau de connections
+     * @return Le table de connections de la piece
+     */
     public int[] getConnections() {
         return connections;
     }
 
+    /**
+     * Regle le table de connections de la pièce
+     * @param connections Le nouveau tableau de connection
+     */
     public void setConnections(int[] connections) {
         this.connections = connections;
     }
 
+    /**
+     * Fait une rotation jusqu'a ce que la piece convienne au masque donné ou que la pièce a fait un tour complet.
+     * @param concavityMask Le masque de concavité
+     * @return true si la pièce a su etre tournée, false si elle a fait un tour complet sans resultat
+     */
     public boolean rotateToMatchConcavity(int[] concavityMask) {
         while (!ConcavityMask.compare(this.getConcavity(), concavityMask)) {
             if (!this.rotateConcavity()) {

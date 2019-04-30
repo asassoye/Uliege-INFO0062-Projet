@@ -1,12 +1,14 @@
-package utils;
+package soccerball.utils;
 
-import piece.Hexagon;
-import piece.Pentagon;
-import piece.PieceCollection;
+import soccerball.piece.Hexagon;
+import soccerball.piece.Pentagon;
+import soccerball.piece.Piece;
+
+import java.util.LinkedList;
 
 public final class PolygonFactory {
-    public static PieceCollection createPieces(int[][] concavityArray, int[] nbElements) {
-        PieceCollection pieces = new PieceCollection();
+    public static LinkedList<Piece> createPieces(int[][] concavityArray, int[] nbElements) {
+        LinkedList<Piece> pieces = new LinkedList<>();
 
         for (int i = 0; i < concavityArray.length; ++i) {
             for (int j = 0; j < nbElements[i]; ++j) {

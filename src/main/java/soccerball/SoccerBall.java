@@ -1,22 +1,48 @@
-import piece.Hexagon;
-import piece.Pentagon;
-import piece.Piece;
-import piece.PieceCollection;
-import utils.ConcavityMask;
-import utils.Data;
-import utils.PolygonFactory;
+package soccerball;
 
+import soccerball.piece.Hexagon;
+import soccerball.piece.Pentagon;
+import soccerball.piece.Piece;
+import soccerball.utils.ConcavityMask;
+import soccerball.utils.Data;
+import soccerball.utils.PolygonFactory;
+
+import java.util.LinkedList;
+
+/**
+ * Classe principale permettant de generer et resoudre le placement des pieces d'un ballon
+ */
 public class SoccerBall {
-    private PieceCollection availablePieces;
-    private PieceCollection orderedPieces;
+    /**
+     * Connections d'un ballon
+     */
     private final static int[][] connections = Data.CONNECTIONS;
+    /**
+     * Pieces disponibles pour la résolution
+     */
+    private LinkedList<Piece> availablePieces;
+    /**
+     * Pieces déja résolues
+     */
+    private LinkedList<Piece> orderedPieces;
 
-
+    /**
+     * Constructeur du ballon
+     *
+     * @param concavityArray La matrive de concavités
+     * @param nbElements     Le nombre de fois que chaque soccerball.piece est présente
+     */
     public SoccerBall(int[][] concavityArray, int[] nbElements) {
         this.availablePieces = PolygonFactory.createPieces(concavityArray, nbElements);
-        this.orderedPieces = new PieceCollection();
+        this.orderedPieces = new LinkedList<>();
     }
 
+    /**
+     * Fonction main de résolution du ballon. Résout le balon avec les données par défaut et imprime le resultat
+     *
+     * @param args Arguments du programme
+     * @throws Exception Probleme avec la resolution du ballon
+     */
     public static void main(String[] args) throws Exception {
         SoccerBall soccerBall = new SoccerBall(Data.ELEMENTS_SIDES, Data.NB_ELEMENTS);
 
@@ -28,10 +54,23 @@ public class SoccerBall {
 
     }
 
+    /**
+     * Résout le placement des pieces depuis le début avec la fonction solve(0)
+     *
+     * @return true si la solution a été trouvée, false si aucune reponse n'est possible.
+     * @throws Exception Problème d'index
+     */
     public boolean solve() throws Exception {
         return solve(0);
     }
 
+    /**
+     * Résout le placement des pieces recursivement
+     *
+     * @param index L'index de la soccerball.piece a résoudre
+     * @return true si la solution a été trouvée, false si aucune reponse n'est possible.
+     * @throws Exception Probleme d'index
+     */
     private boolean solve(int index) throws Exception {
         boolean found = false;
         int[] concavityArray;
@@ -85,10 +124,23 @@ public class SoccerBall {
         return true;
     }
 
+    /**
+     * Retourne le masque de concavité
+     *
+     * @param piece La soccerball.piece dont on souhaite le masque de concavité
+     * @return Le masque de concavité
+     */
     private int[] getConcavityMask(Piece piece) {
         return ConcavityMask.getConcavityMask(piece, this.orderedPieces);
     }
 
+    /**
+     * Renvoie la prochaine soccerball.piece ordonnée avec le nombre de cotés entrée et le nombre de pieces a sauter.
+     *
+     * @param sides Nombre de cotés de la soccerball.piece souhaitée
+     * @param skip Nombre de pieces à sauter
+     * @return La prochaine soccerball.piece ordonée si trouvée, null si aucune n'a été trouvée
+     */
     private Piece getNextAvailablePiece(int sides, int skip) {
         int skipped = 0;
 
@@ -118,22 +170,31 @@ public class SoccerBall {
         return null;
     }
 
-
+    /**
+     * Imprime le resultat de chaque soccerball.piece dans la console
+     */
     private void printOrderedPieces() {
         for (Piece orderedPiece : orderedPieces) {
             orderedPiece.printPiece();
         }
     }
 
+    /**
+     * Ajoute une soccerball.piece ordonée et la retire des pieces disponibles
+     *
+     * @param piece Piece a ajouter
+     * @param connections Les connections de cette nouvelle soccerball.piece
+     * @throws Exception La soccerball.piece n'est pas placable
+     */
     private void addOrderedPiece(Piece piece, int[] connections) throws Exception {
         int id = this.availablePieces.indexOf(piece);
 
         if (id == -1) {
-            throw new Exception("The required piece is not available");
+            throw new Exception("The required soccerball.piece is not available");
         }
 
         if (connections.length != piece.getConcavity().length) {
-            throw new Exception("The connections are not compatible with piece");
+            throw new Exception("The connections are not compatible with soccerball.piece");
         }
 
         piece.setConnections(connections);
@@ -143,6 +204,12 @@ public class SoccerBall {
         availablePieces.remove(id);
     }
 
+    /**
+     * Deplace la derniere soccerball.piece ordonée dans la liste des soccerball.piece disponible dans l'ordre et reinitialise son orientation
+     * et ces connections
+     *
+     * @throws Exception La soccerball.piece n'a pas reussi a être deplacée.
+     */
     private void restoreLastOrderedPiece() throws Exception {
         Piece piece = this.orderedPieces.getLast();
         piece.setPosition(0);
@@ -164,10 +231,14 @@ public class SoccerBall {
         }
 
 
-
     }
 
-    public PieceCollection getOrderedPieces() {
+    /**
+     * Getter des pieces ordonnées
+     *
+     * @return La liste des pieces ordonnées
+     */
+    public LinkedList<Piece> getOrderedPieces() {
         return orderedPieces;
     }
 }

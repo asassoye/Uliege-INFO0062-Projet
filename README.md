@@ -14,7 +14,7 @@ $ mvn test
 ### Executer la résolution du ballon
 
 ```console
-$ java -cp build/classes/ SoccerBall
+$ java -cp build/classes/ soccerball.SoccerBall
 ```
 
 ## Docker

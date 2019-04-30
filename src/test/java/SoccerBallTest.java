@@ -1,8 +1,9 @@
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
-import piece.Piece;
-import utils.ConcavityMask;
-import utils.Data;
+import soccerball.SoccerBall;
+import soccerball.piece.Piece;
+import soccerball.utils.ConcavityMask;
+import soccerball.utils.Data;
 
 import java.util.Arrays;
 
