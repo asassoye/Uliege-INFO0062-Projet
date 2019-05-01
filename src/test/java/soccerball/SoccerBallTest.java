@@ -3,6 +3,9 @@ package soccerball;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 import soccerball.piece.Piece;
+import soccerball.piece.exceptions.ConcavityException;
+import soccerball.piece.exceptions.ConcavitySizeArrayException;
+import soccerball.piece.exceptions.ElementException;
 import soccerball.utils.ConcavityMask;
 import soccerball.utils.Data;
 
@@ -15,7 +18,11 @@ public class SoccerBallTest {
     private SoccerBall soccerBall;
 
     public SoccerBallTest() {
-        this.soccerBall = new SoccerBall(Data.ELEMENTS_SIDES, Data.NB_ELEMENTS);
+        try {
+            this.soccerBall = new SoccerBall(Data.ELEMENTS_SIDES, Data.NB_ELEMENTS);
+        } catch (ConcavitySizeArrayException | ElementException | ConcavityException e) {
+            e.printStackTrace();
+        }
 
 
         try {

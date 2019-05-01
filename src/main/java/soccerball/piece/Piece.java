@@ -1,5 +1,8 @@
 package soccerball.piece;
 
+import soccerball.piece.exceptions.ConcavityException;
+import soccerball.piece.exceptions.ElementException;
+import soccerball.piece.exceptions.OrientationException;
 import soccerball.utils.ConcavityMask;
 
 import java.util.LinkedList;
@@ -35,14 +38,23 @@ public abstract class Piece {
      * @param element        L'id de l'element
      * @param concavityArray le tableau de concavité
      */
-    Piece(int element, int[] concavityArray) {
+    Piece(int element, int[] concavityArray) throws ConcavityException, ElementException {
         this.position = 0;
         this.orientation = 0;
         for (int concavity : concavityArray) {
-            this.concavity.add(concavity);
+            if (concavity == -1 || concavity == 1) {
+                this.concavity.add(concavity);
+            } else {
+                throw new ConcavityException(concavity);
+            }
+
+        }
+        if (element > 0) {
+            this.element = element;
+        } else {
+            throw new ElementException(element);
         }
 
-        this.element = element;
         this.connections = null;
     }
 
@@ -119,12 +131,12 @@ public abstract class Piece {
 
     /**
      * Regle l'orientation et fait la rotation de la concavité
-     * @param orientation  Orientation souhaitée
-     * @throws Exception  Reglage impossible
+     * @param orientation               Orientation souhaitée
+     * @throws OrientationException     L'orientation souhaitée est incorrecte
      */
-    public void setOrientation(int orientation, boolean clockwise) throws Exception {
+    public void setOrientation(int orientation, boolean clockwise) throws OrientationException {
         if (orientation < 0 || orientation > this.concavity.size() - 1) {
-            throw new Exception("Set orientation impossible!");
+            throw new OrientationException(orientation, this.concavity.size());
         }
 
         while (this.orientation != orientation) {
@@ -142,7 +154,7 @@ public abstract class Piece {
 
     /**
      * Regle l'id de l'element
-     * @param element le nouvel id de l'element
+     * @param element   Le nouvel id de l'element
      */
     public void setElement(int element) {
         this.element = element;

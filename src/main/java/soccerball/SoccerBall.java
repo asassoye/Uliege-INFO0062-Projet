@@ -3,6 +3,10 @@ package soccerball;
 import soccerball.piece.Hexagon;
 import soccerball.piece.Pentagon;
 import soccerball.piece.Piece;
+import soccerball.piece.exceptions.ConcavityException;
+import soccerball.piece.exceptions.ConcavitySizeArrayException;
+import soccerball.piece.exceptions.ElementException;
+import soccerball.piece.exceptions.OrientationException;
 import soccerball.utils.ConcavityMask;
 import soccerball.utils.Data;
 import soccerball.utils.PolygonFactory;
@@ -34,7 +38,7 @@ public class SoccerBall {
      * @param concavityArray La matrive de concavités
      * @param nbElements     Le nombre de fois que chaque soccerball.piece est présente
      */
-    public SoccerBall(int[][] concavityArray, int[] nbElements) {
+    public SoccerBall(int[][] concavityArray, int[] nbElements) throws ConcavitySizeArrayException, ElementException, ConcavityException {
         this.availablePieces = PolygonFactory.createPieces(concavityArray, nbElements);
         this.orderedPieces = new LinkedList<>();
     }
@@ -45,8 +49,14 @@ public class SoccerBall {
      * @param args Arguments du programme
      * @throws Exception Probleme avec la resolution du ballon
      */
-    public static void main(String[] args) throws Exception {
-        SoccerBall soccerBall = new SoccerBall(Data.ELEMENTS_SIDES, Data.NB_ELEMENTS);
+    public static void main(String[] args) {
+        SoccerBall soccerBall = null;
+        try {
+            soccerBall = new SoccerBall(Data.ELEMENTS_SIDES, Data.NB_ELEMENTS);
+        } catch (ConcavitySizeArrayException | ElementException | ConcavityException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
 
         if (args.length != 0) {
             String arg = args[0];
@@ -60,22 +70,22 @@ public class SoccerBall {
                 case "--anti-clockwise":
                     if (!soccerBall.solve(false)) {
                         System.out.println("No solution found.");
-                        System.exit(-1);
+                        System.exit(1);
                     }
                     break;
                 case "--help":
                     printHelp();
-                    System.exit(-1);
+                    System.exit(1);
                 default:
                     System.out.printf("Argument %s not recognized!%n", arg);
                     printHelp();
-                    System.exit(-1);
+                    System.exit(1);
             }
 
         } else {
             if (!soccerBall.solve()) {
                 System.out.println("No solution found.");
-                System.exit(-1);
+                System.exit(1);
             }
         }
 
@@ -98,12 +108,11 @@ public class SoccerBall {
      * @return true si la solution a été trouvée, false si aucune reponse n'est possible.
      * @throws Exception Problème d'index
      */
-    public boolean solve() throws Exception {
-        this.clockwise = true;
-        return solve(0);
+    public boolean solve() {
+        return solve(true);
     }
 
-    public boolean solve(boolean clockwise) throws Exception {
+    public boolean solve(boolean clockwise) {
         this.clockwise = clockwise;
         return solve(0);
     }
@@ -125,21 +134,13 @@ public class SoccerBall {
      * @return true si la solution a été trouvée, false si aucune reponse n'est possible.
      * @throws Exception Probleme d'index
      */
-    private boolean solve(int index) throws Exception {
+    private boolean solve(int index) {
         boolean found = false;
         int[] concavityArray;
         boolean rotated;
         Piece piece;
         int retry = 0;
         int firstElement = 0;
-
-        if (index > connections.length - 1) {
-            throw new Exception("index out of limit index:" + index + "/" + (connections.length - 1));
-        }
-
-        if (index > orderedPieces.size()) {
-            throw new Exception("index error");
-        }
 
         while (!found) {
             piece = getNextAvailablePiece(connections[index].length, retry);
@@ -226,20 +227,12 @@ public class SoccerBall {
     /**
      * Ajoute une soccerball.piece ordonée et la retire des pieces disponibles
      *
-     * @param piece       Piece a ajouter
-     * @param connections Les connections de cette nouvelle soccerball.piece
-     * @throws Exception La soccerball.piece n'est pas placable
+     * @param piece                             Piece a ajouter
+     * @param connections                       Les connections de cette nouvelle soccerball.piece
+     * @throws ConnectionArraySizeException     Le tableau de connections n'est pas compatible avec la piece
      */
-    private void addOrderedPiece(Piece piece, int[] connections) throws Exception {
+    private void addOrderedPiece(Piece piece, int[] connections) {
         int id = this.availablePieces.indexOf(piece);
-
-        if (id == -1) {
-            throw new Exception("The required soccerball.piece is not available");
-        }
-
-        if (connections.length != piece.getConcavity().length) {
-            throw new Exception("The connections are not compatible with soccerball.piece");
-        }
 
         piece.setConnections(connections);
         piece.setPosition(orderedPieces.size() + 1);
@@ -260,14 +253,16 @@ public class SoccerBall {
     /**
      * Deplace la derniere soccerball.piece ordonée dans la liste des soccerball.piece
      * disponible dans l'ordre et reinitialise son orientation et ces connections
-     *
-     * @throws Exception La soccerball.piece n'a pas reussi a être deplacée.
      */
-    private void restoreLastOrderedPiece() throws Exception {
+    private void restoreLastOrderedPiece() {
         Piece piece = this.orderedPieces.getLast();
-        piece.setPosition(0);
-        piece.setOrientation(0, this.clockwise);
-        piece.setConnections(null);
+        try {
+            piece.setPosition(0);
+            piece.setOrientation(0, this.clockwise);
+            piece.setConnections(null);
+        } catch (OrientationException e) {
+            return;
+        }
 
         this.orderedPieces.removeLast();
 

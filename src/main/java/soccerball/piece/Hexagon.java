@@ -1,5 +1,9 @@
 package soccerball.piece;
 
+import soccerball.piece.exceptions.ConcavityException;
+import soccerball.piece.exceptions.ConcavitySizeArrayException;
+import soccerball.piece.exceptions.ElementException;
+
 /**
  * Classe Hexagon
  */
@@ -16,15 +20,11 @@ public class Hexagon extends Piece {
      * @param concavity Le tableau de concavité
      * @throws Exception L'Hexagon ne peut être crée
      */
-    public Hexagon(int element, int[] concavity) throws Exception {
+    public Hexagon(int element, int[] concavity) throws ConcavitySizeArrayException, ConcavityException, ElementException {
         super(element, concavity);
 
         if (concavity.length != SIDES) {
-            throw new Exception("soccerball.piece.Hexagon concavity array must have 6 elements");
-        }
-
-        if (element < 1 || element > 10) {
-            throw new Exception("soccerball.piece.Hexagon element must have a value between 11 and 14");
+            throw new ConcavitySizeArrayException(this.concavity.size(), SIDES);
         }
     }
 }

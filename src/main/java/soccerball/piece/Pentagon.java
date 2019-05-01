@@ -1,5 +1,9 @@
 package soccerball.piece;
 
+import soccerball.piece.exceptions.ConcavityException;
+import soccerball.piece.exceptions.ConcavitySizeArrayException;
+import soccerball.piece.exceptions.ElementException;
+
 public class Pentagon extends Piece {
     /**
      * Nombre de cotés a la piece
@@ -11,16 +15,12 @@ public class Pentagon extends Piece {
      *
      * @param element   L'id de l'element
      * @param concavity Le tableau de concavité
-     * @throws Exception Le pentagone ne peut être crée
+     * @throws ConcavitySizeArrayException Le tableau de concavité est incorrecte
      */
-    public Pentagon(int element, int[] concavity) throws Exception {
+    public Pentagon(int element, int[] concavity) throws ConcavitySizeArrayException, ConcavityException, ElementException {
         super(element, concavity);
-        if (this.concavity.size() != SIDES) {
-            throw new Exception("soccerball.piece.Pentagon concavity array must have 5 elements");
-        }
-
-        if (this.element < 11 || this.element > 14) {
-            throw new Exception("soccerball.piece.Pentagon element must have a value between 11 and 14");
+        if (concavity.length != SIDES) {
+            throw new ConcavitySizeArrayException(concavity.length, SIDES);
         }
     }
 }
