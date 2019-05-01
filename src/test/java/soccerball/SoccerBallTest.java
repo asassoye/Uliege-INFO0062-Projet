@@ -1,6 +1,7 @@
+package soccerball;
+
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
-import soccerball.SoccerBall;
 import soccerball.piece.Piece;
 import soccerball.utils.ConcavityMask;
 import soccerball.utils.Data;

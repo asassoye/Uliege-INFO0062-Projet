@@ -47,15 +47,6 @@ public abstract class Piece {
     }
 
     /**
-     * Fonction de rotation de la concavité par défault.
-     *
-     * @return rotateConcavity(true);
-     */
-    private boolean rotateConcavity() {
-        return rotateConcavity(true);
-    }
-
-    /**
      * Fonction de rotation de la concavité
      *
      * @param clockwize Rotation horaire (true) ou anti-horaire (false)
@@ -131,13 +122,13 @@ public abstract class Piece {
      * @param orientation  Orientation souhaitée
      * @throws Exception  Reglage impossible
      */
-    public void setOrientation(int orientation) throws Exception {
+    public void setOrientation(int orientation, boolean clockwise) throws Exception {
         if (orientation < 0 || orientation > this.concavity.size() - 1) {
             throw new Exception("Set orientation impossible!");
         }
 
         while (this.orientation != orientation) {
-            this.rotateConcavity();
+            this.rotateConcavity(clockwise);
         }
     }
 
@@ -186,9 +177,9 @@ public abstract class Piece {
      * @param concavityMask Le masque de concavité
      * @return true si la pièce a su etre tournée, false si elle a fait un tour complet sans resultat
      */
-    public boolean rotateToMatchConcavity(int[] concavityMask) {
+    public boolean rotateToMatchConcavity(int[] concavityMask, boolean clockwise) {
         while (!ConcavityMask.compare(this.getConcavity(), concavityMask)) {
-            if (!this.rotateConcavity()) {
+            if (!this.rotateConcavity(clockwise)) {
                 return false;
             }
         }
