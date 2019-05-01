@@ -64,7 +64,7 @@ public abstract class Piece {
      * @param clockwize Rotation horaire (true) ou anti-horaire (false)
      * @return true si la piece à été tournée, false si elle a fait un tour complet
      */
-    private boolean rotateConcavity(boolean clockwize) {
+    public boolean rotateConcavity(boolean clockwize) {
         if (clockwize) {
             int movingPiece = this.concavity.getLast();
             this.concavity.removeLast();
