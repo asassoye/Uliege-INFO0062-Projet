@@ -17,6 +17,18 @@ $ mvn test
 $ java -cp build/classes/ soccerball.SoccerBall
 ```
 
+## Make
+### Compilation
+```console
+$ make compile
+```
+
+### Executer la résolution du ballon
+
+```console
+$ make execute
+```
+
 ## Docker
 ### Build image
 ```console
