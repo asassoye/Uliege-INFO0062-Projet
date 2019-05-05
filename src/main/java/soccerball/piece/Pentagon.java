@@ -15,7 +15,9 @@ public class Pentagon extends Piece {
      *
      * @param element   L'id de l'element
      * @param concavity Le tableau de concavité
-     * @throws ConcavitySizeArrayException Le tableau de concavité est incorrecte
+     * @throws ConcavitySizeArrayException La taille du tableau de concavité est incorrete
+     * @throws ConcavityException La concavité est incorrecte
+     * @throws ElementException L'element est negatif
      */
     public Pentagon(int element, int[] concavity) throws ConcavitySizeArrayException, ConcavityException, ElementException {
         super(element, concavity);

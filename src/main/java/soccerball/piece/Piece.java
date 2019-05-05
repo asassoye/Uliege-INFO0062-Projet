@@ -37,6 +37,8 @@ public abstract class Piece {
      *
      * @param element        L'id de l'element
      * @param concavityArray le tableau de concavité
+     * @throws ConcavityException La concavité est incorrecte
+     * @throws ElementException L'element est negatif
      */
     Piece(int element, int[] concavityArray) throws ConcavityException, ElementException {
         this.position = 0;
@@ -132,6 +134,7 @@ public abstract class Piece {
     /**
      * Regle l'orientation et fait la rotation de la concavité
      * @param orientation               Orientation souhaitée
+     * @param clockwise                 True si sense horaire, False si sense anti-horaire
      * @throws OrientationException     L'orientation souhaitée est incorrecte
      */
     public void setOrientation(int orientation, boolean clockwise) throws OrientationException {
@@ -187,6 +190,7 @@ public abstract class Piece {
     /**
      * Fait une rotation jusqu'a ce que la piece convienne au masque donné ou que la pièce a fait un tour complet.
      * @param concavityMask Le masque de concavité
+     * @param clockwise Rotation horaire (true) ou anti-horaire (false)
      * @return true si la pièce a su etre tournée, false si elle a fait un tour complet sans resultat
      */
     public boolean rotateToMatchConcavity(int[] concavityMask, boolean clockwise) {

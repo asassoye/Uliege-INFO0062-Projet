@@ -18,7 +18,9 @@ public class Hexagon extends Piece {
      *
      * @param element   L'id de l'element
      * @param concavity Le tableau de concavité
-     * @throws Exception L'Hexagon ne peut être crée
+     * @throws ConcavitySizeArrayException La taille du tableau de concavité est incorrete
+     * @throws ConcavityException La concavité est incorrecte
+     * @throws ElementException L'element est negatif
      */
     public Hexagon(int element, int[] concavity) throws ConcavitySizeArrayException, ConcavityException, ElementException {
         super(element, concavity);

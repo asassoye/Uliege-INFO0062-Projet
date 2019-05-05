@@ -38,25 +38,25 @@ public class SoccerBall {
      * @param concavityArray La matrive de concavités
      * @param nbElements     Le nombre de fois que chaque soccerball.piece est présente
      */
-    public SoccerBall(int[][] concavityArray, int[] nbElements) throws ConcavitySizeArrayException, ElementException, ConcavityException {
-        this.availablePieces = PolygonFactory.createPieces(concavityArray, nbElements);
-        this.orderedPieces = new LinkedList<>();
+    public SoccerBall(int[][] concavityArray, int[] nbElements) {
+        try {
+            this.availablePieces = PolygonFactory.createPieces(concavityArray, nbElements);
+            this.orderedPieces = new LinkedList<>();
+        } catch (ConcavitySizeArrayException | ElementException | ConcavityException e) {
+            System.out.println("Generation des pieces impossible!");
+            System.exit(-1);
+        }
+
     }
 
     /**
      * Fonction main de résolution du ballon. Résout le balon avec les données par défaut et imprime le resultat
      *
      * @param args Arguments du programme
-     * @throws Exception Probleme avec la resolution du ballon
      */
     public static void main(String[] args) {
-        SoccerBall soccerBall = null;
-        try {
-            soccerBall = new SoccerBall(Data.ELEMENTS_SIDES, Data.NB_ELEMENTS);
-        } catch (ConcavitySizeArrayException | ElementException | ConcavityException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
+        SoccerBall soccerBall = new SoccerBall(Data.ELEMENTS_SIDES, Data.NB_ELEMENTS);
+
 
         if (args.length != 0) {
             String arg = args[0];
@@ -106,7 +106,6 @@ public class SoccerBall {
      * Résout le placement des pieces depuis le début avec la fonction solve(0)
      *
      * @return true si la solution a été trouvée, false si aucune reponse n'est possible.
-     * @throws Exception Problème d'index
      */
     public boolean solve() {
         return solve(true);
@@ -132,7 +131,6 @@ public class SoccerBall {
      *
      * @param index L'index de la soccerball.piece a résoudre
      * @return true si la solution a été trouvée, false si aucune reponse n'est possible.
-     * @throws Exception Probleme d'index
      */
     private boolean solve(int index) {
         boolean found = false;
@@ -229,7 +227,6 @@ public class SoccerBall {
      *
      * @param piece                             Piece a ajouter
      * @param connections                       Les connections de cette nouvelle soccerball.piece
-     * @throws ConnectionArraySizeException     Le tableau de connections n'est pas compatible avec la piece
      */
     private void addOrderedPiece(Piece piece, int[] connections) {
         int id = this.availablePieces.indexOf(piece);
